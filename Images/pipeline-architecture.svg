@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="330" viewBox="0 0 1100 330" role="img" aria-labelledby="title desc">
+  <title id="title">Blinkit analytics pipeline architecture</title>
+  <desc id="desc">CSV data flows through audit, SQL staging, cleaning, analytics, reports, and Excel dashboard layers.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#0c831f"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="330" fill="#fffdf2"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="52" y="48" font-size="30" font-weight="800" fill="#111827">Reproducible Analytics Pipeline</text>
+    <text x="52" y="78" font-size="16" fill="#4b5563">Every number in the dashboard can be traced back to a scripted source step.</text>
+    <g font-size="15" font-weight="700" fill="#111827">
+      <rect x="52" y="125" width="145" height="86" rx="10" fill="#ffffff" stroke="#f8cb46" stroke-width="3"/>
+      <text x="82" y="160">Dirty CSV</text>
+      <text x="77" y="184" font-size="13" font-weight="600" fill="#6b7280">8,537 rows</text>
+      <rect x="248" y="125" width="145" height="86" rx="10" fill="#ffffff" stroke="#f8cb46" stroke-width="3"/>
+      <text x="282" y="160">Audit</text>
+      <text x="273" y="184" font-size="13" font-weight="600" fill="#6b7280">defect profile</text>
+      <rect x="444" y="125" width="145" height="86" rx="10" fill="#ffffff" stroke="#0c831f" stroke-width="3"/>
+      <text x="479" y="160">SQL Clean</text>
+      <text x="470" y="184" font-size="13" font-weight="600" fill="#6b7280">8,523 rows</text>
+      <rect x="640" y="125" width="145" height="86" rx="10" fill="#ffffff" stroke="#0c831f" stroke-width="3"/>
+      <text x="673" y="160">Analysis</text>
+      <text x="662" y="184" font-size="13" font-weight="600" fill="#6b7280">40 questions</text>
+      <rect x="836" y="125" width="145" height="86" rx="10" fill="#ffffff" stroke="#111827" stroke-width="3"/>
+      <text x="873" y="160">Excel</text>
+      <text x="858" y="184" font-size="13" font-weight="600" fill="#6b7280">9 charts, 6 slicers</text>
+    </g>
+    <g stroke="#0c831f" stroke-width="4" fill="none" marker-end="url(#arrow)">
+      <path d="M204 168 H238"/>
+      <path d="M400 168 H434"/>
+      <path d="M596 168 H630"/>
+      <path d="M792 168 H826"/>
+    </g>
+    <g font-size="14" fill="#374151">
+      <text x="72" y="260">Raw data is preserved</text>
+      <text x="267" y="260">Issues quantified first</text>
+      <text x="449" y="260">Rules are auditable</text>
+      <text x="653" y="260">KPIs are verified</text>
+      <text x="850" y="260">Dashboard is rebuilt</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">Blinkit Sales Analytics Dashboard</title>
+  <desc id="desc">Professional banner for a SQL, Python, and Excel retail analytics project.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8cb46"/>
+      <stop offset="0.58" stop-color="#ffdf6e"/>
+      <stop offset="1" stop-color="#0c831f"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-20%" width="120%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#1f2933" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="360" fill="url(#bg)"/>
+  <path d="M0 268 C185 226 308 295 481 249 C669 198 761 243 937 198 C1078 162 1179 165 1280 128 L1280 360 L0 360 Z" fill="#ffffff" opacity="0.34"/>
+  <path d="M0 306 C165 283 320 322 478 292 C690 252 821 305 1004 251 C1113 219 1198 218 1280 199 L1280 360 L0 360 Z" fill="#0c831f" opacity="0.16"/>
+  <g transform="translate(86 72)">
+    <rect x="0" y="0" width="602" height="216" rx="22" fill="#ffffff" opacity="0.94" filter="url(#shadow)"/>
+    <text x="38" y="66" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="800" fill="#111827">Blinkit Sales Analytics</text>
+    <text x="40" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600" fill="#0c831f">SQL pipeline · Python validation · Excel executive dashboard</text>
+    <g font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">
+      <text x="40" y="163">₹2.60 Cr revenue</text>
+      <text x="236" y="163">8,523 records</text>
+      <text x="405" y="163">40 SQL questions</text>
+    </g>
+  </g>
+  <g transform="translate(785 66)" filter="url(#shadow)">
+    <rect x="0" y="0" width="360" height="230" rx="20" fill="#ffffff"/>
+    <rect x="30" y="36" width="300" height="20" rx="10" fill="#f8cb46"/>
+    <rect x="30" y="78" width="118" height="108" rx="10" fill="#0c831f"/>
+    <rect x="169" y="102" width="38" height="84" rx="8" fill="#f8cb46"/>
+    <rect x="221" y="68" width="38" height="118" rx="8" fill="#f8cb46"/>
+    <rect x="273" y="128" width="38" height="58" rx="8" fill="#f8cb46"/>
+    <polyline points="40,185 88,146 130,162 188,117 240,96 308,133" fill="none" stroke="#111827" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="88" cy="146" r="8" fill="#111827"/>
+    <circle cx="188" cy="117" r="8" fill="#111827"/>
+    <circle cx="240" cy="96" r="8" fill="#111827"/>
+  </g>
+</svg>
