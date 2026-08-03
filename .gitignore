@@ -1,0 +1,19 @@
+# Pipeline artefacts - regenerate with Scripts/03_clean_and_analyze.py
+Reports/blinkit_clean.csv
+Reports/_*.pdf
+Images/_*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Excel lock files
+~$*.xlsx
+*.xlk
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini

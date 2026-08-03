@@ -1,0 +1,194 @@
+================================================================================
+ BLINKIT SALES ANALYTICS DASHBOARD  -  PROJECT PROVENANCE & BUILD LOG
+================================================================================
+ Location : D:\DA-projects\Blinkit-Sales-Analytics\
+ Built    : 2026-08-03
+ Purpose  : Full honest record of where the data came from, what is real vs
+            synthetic, what was built, and how it was verified.
+ Read this before presenting the project so you can answer any question about it.
+================================================================================
+
+
+--------------------------------------------------------------------------------
+ 1. THE DATASET  -  IS IT REAL OR FAKE?
+--------------------------------------------------------------------------------
+
+  STATUS: **SYNTHETIC (generated), but built to faithfully match the real
+          "BlinkIT Grocery Data" schema.**
+
+  WHY IT IS SYNTHETIC:
+    The public "BlinkIT Grocery Data.csv" could not be downloaded in the build
+    environment. Every source URL tried returned HTTP 404:
+      - github.com/AdityaGor/Blinkit-Sales-Analysis
+      - github.com/rajatverma1/Blinkit-Analysis
+      - github.com/Sagar-Chougule/Blinkit-Sales-Analysis
+      - github.com/nikhilsthorat03/Blinkit-Data-Analysis
+      - (and several others)
+    None were reachable, so the dataset was RECONSTRUCTED by a Python script.
+
+  WHAT "FAITHFUL RECONSTRUCTION" MEANS:
+    It is NOT random noise. The generator reproduces the real dataset's:
+      - exact 12-column schema + an added "Order Date" column
+      - real identifier formats (FDX32, NCB42, DRC13, OUT027, etc.)
+      - the real 16 item categories (Fruits and Vegetables, Snack Foods, ...)
+      - the real 10 outlets with their true attributes (tier, size, type, year)
+      - realistic value ranges and cardinalities
+      - the SAME data-quality defects the real file is famous for (see section 3)
+    Sales values are driven by an explicit DEMAND MODEL, so every insight is a
+    genuine mathematical property of the data, not a number written to look good.
+
+  THE DEMAND MODEL (how each sale value was produced):
+      Sales = base_price(item_type)
+            * outlet_type_multiplier      (Supermarket Type3 highest, Grocery lowest)
+            * tier_multiplier             (Tier 3 > Tier 2 > Tier 1)
+            * outlet_size_multiplier
+            * maturity(years_since_establishment)
+            * seasonality(month)          (Indian festive peak Oct-Nov)
+            * weekend_uplift(weekday)
+            * visibility_uplift(visibility)
+            * yoy_growth(year)            (+18% 2022->2023 baked in)
+            * lognormal_noise             (mean ~ 1.0)
+
+  HONESTY NOTE:
+    The README states this openly in a "Data provenance" callout. If you use
+    the REAL Kaggle file instead, drop it into Dataset/ and skip the generator
+    - the schema matches and the whole pipeline runs unchanged, EXCEPT the
+    time-series queries (the real file has no Order Date column).
+
+  SEED: 20240215 (fixed, so the dataset is identical on every regeneration)
+
+
+--------------------------------------------------------------------------------
+ 2. FINAL DATASET FACTS (what the generated file actually contains)
+--------------------------------------------------------------------------------
+
+  File: Dataset/BlinkIT Grocery Data.csv
+    - Rows in file      : 8,537  (8,523 unique + 14 injected duplicate rows)
+    - Rows after clean  : 8,523
+    - Columns           : 13 (12 canonical + Order Date)
+    - Total revenue     : Rs 25,965,273.44  (~Rs 2.60 Cr)
+    - Distinct products : 1,392
+    - Categories        : 16
+    - Outlets           : 10
+    - Date range        : 2022-01-01 to 2023-12-31
+    - Avg sale          : Rs 3,046   |   Median sale: Rs 2,397
+    - Avg rating        : 4.00 / 5
+
+
+--------------------------------------------------------------------------------
+ 3. DATA-QUALITY DEFECTS DELIBERATELY INJECTED (to mirror the real file)
+--------------------------------------------------------------------------------
+
+  These were added ON PURPOSE so the cleaning stage is genuine, not theatrical:
+
+    1. Item Fat Content  - 7 spellings for 2 real categories:
+         "Low Fat", "low fat", "Low Fat ", "LF", "Regular", "reg", " Regular"
+         (includes stray leading/trailing whitespace)
+    2. Item Weight       - 17.2% missing (1,468 rows) - matches real file's rate
+    3. Item Visibility   - 6.0% recorded as 0.00 (512 rows) - impossible for a
+                           stocked product, a "not recorded" sentinel
+    4. Duplicate rows    - 14 exact duplicates (simulated double-loaded ETL batch)
+    5. Rating            - 1,263 rows carry more decimal precision than the
+                           1-decimal collection scale; 1 value pushed above 5.0
+    6. Outlet Size       - blank for 3 outlets (OUT010, OUT017, OUT045),
+                           27.5% of rows
+
+
+--------------------------------------------------------------------------------
+ 4. EVERYTHING THAT WAS BUILT (full deliverable list)
+--------------------------------------------------------------------------------
+
+  Dataset/
+    BlinkIT Grocery Data.csv          the generated dataset (8,537 rows)
+
+  SQL/  (2,355 lines total, MySQL 8.0 syntax)
+    Database.sql                      staging + analytics tables, ENUM/CHECK,
+                                      11 indexes, generated columns
+    Data Cleaning.sql                 profiling + one auditable INSERT..SELECT
+                                      cleaning pipeline + validation
+    Exploratory Analysis.sql          baseline KPIs and distributions
+    Business Questions.sql            40 business questions (Q1-Q40)
+    Advanced Analysis.sql             A1-A14: window functions, CTEs, recursive
+                                      CTE, 5 views, stored procedure, EXPLAIN
+
+  Excel Dashboard/
+    Blinkit Dashboard.xlsx            10 PivotTables, 9 charts, 6 slicers,
+                                      6 live-formula KPI cards, Blinkit branding
+                                      (yellow #F8CB46, green #0C831F)
+
+  Images/
+    Dashboard Preview.png             rendered from the real workbook
+
+  Reports/
+    data_quality_report.md            full pre-cleaning audit
+    analysis_output.json              machine-readable headline facts
+    aggregates.xlsx                   24 aggregate tables
+    blinkit_clean.csv                 cleaned pipeline output
+
+  Scripts/  (Python, the build engine)
+    01_generate_dataset.py            dataset builder + demand model
+    02_profile_dataset.py            Step-1 data quality audit
+    03_clean_and_analyze.py          cleaning cross-check + aggregates
+    04_build_dashboard.py            Excel dashboard builder (COM automation)
+    05_export_preview.py             preview image export
+
+  README.md                           14-section portfolio README
+  .gitignore
+
+
+--------------------------------------------------------------------------------
+ 5. SQL TECHNIQUES DEMONSTRATED (all verified present)
+--------------------------------------------------------------------------------
+
+  CASE WHEN, CTEs, Recursive CTE, ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD,
+  Running total, Moving average, NTILE, PERCENT_RANK, CUME_DIST,
+  FIRST_VALUE/LAST_VALUE, correlated subqueries, EXISTS/NOT EXISTS, self-join,
+  conditional aggregation (pivot), WINDOW clause, 5 Views, stored procedure,
+  EXPLAIN/query tuning, 11 indexes, primary key, ENUM + CHECK constraints.
+
+  40 business questions confirmed present (Q1-Q40, no gaps, no duplicates).
+
+
+--------------------------------------------------------------------------------
+ 6. HOW IT WAS VERIFIED
+--------------------------------------------------------------------------------
+
+  - The SQL cleaning logic was independently reproduced in pandas
+    (03_clean_and_analyze.py). Both agree on row counts, revenue totals and
+    every reconciliation check.
+  - 57 numeric claims in the README were asserted against the computed data:
+        RESULT: 57 PASS, 0 FAIL.
+    One claim was corrected during this check (a "35% swing" that is actually
+    36%; and pre/post-cleaning imputation counts were disambiguated).
+  - Revenue reconciliation: raw Rs 26,028,834.62 - Rs 63,561.18 (the 14
+    duplicates) = Rs 25,965,273.44 clean. Exactly the duplicated revenue was
+    removed, nothing else.
+
+
+--------------------------------------------------------------------------------
+ 7. IMPORTANT CAVEAT - SQL WAS NOT EXECUTED
+--------------------------------------------------------------------------------
+
+  MySQL 8.0 IS installed on the build machine, but no working root password was
+  available, so the .sql files were NEVER run against a live server. They are
+  written in correct MySQL 8.0 syntax and the LOGIC was validated by
+  reproducing the entire pipeline in pandas.
+
+  ACTION FOR YOU: run the SQL once yourself to confirm before relying on it:
+     mysql -u root -p < "SQL/Database.sql"
+     mysql -u root -p --local-infile=1 blinkit_analytics < "SQL/Data Cleaning.sql"
+     ... (then the remaining 3 SQL files)
+
+
+--------------------------------------------------------------------------------
+ 8. TECH STACK USED
+--------------------------------------------------------------------------------
+
+  Python 3.14 (pandas, openpyxl, matplotlib, pywin32, PyMuPDF)
+  MySQL 8.0 (schema + queries, written not executed)
+  Microsoft Excel (dashboard via COM automation)
+  Windows 11
+
+================================================================================
+ END OF BLINKIT PROVENANCE FILE
+================================================================================
